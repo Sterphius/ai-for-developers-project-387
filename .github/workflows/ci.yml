@@ -1,0 +1,45 @@
+name: ci
+on:
+  pull_request:
+    branches: [main]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: server/go.mod
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - run: go test ./...
+        working-directory: server
+
+      - run: npm install && npm run lint
+        working-directory: web
+
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: server/go.mod
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - run: npm install
+        working-directory: web
+
+      - run: npx playwright install chromium --with-deps
+        working-directory: web
+
+      - run: npm run test:e2e
+        working-directory: web

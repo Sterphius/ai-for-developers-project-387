@@ -1,0 +1,14 @@
+node_modules/
+test-results/
+web/test-results/
+.DS_Store
+api
+cmd/
+internal/
+migrations/
+main.tsp
+service.tsp
+models/
+operations/
+openapi/
+tspconfig.yaml
