@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/Sterphius/ai-for-developers-project-387/compare/v1.1.1...v1.1.2) (2026-06-21)
+
+
+### Bug Fixes
+
+* remove committed binary, add to gitignore ([d212f5a](https://github.com/Sterphius/ai-for-developers-project-387/commit/d212f5ae0ec4d973605297df9208f91048cc07a7))
+
 ## [1.1.1](https://github.com/Sterphius/ai-for-developers-project-387/compare/v1.1.0...v1.1.1) (2026-06-21)
 
 
