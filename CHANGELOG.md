@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/Sterphius/ai-for-developers-project-387/compare/v1.1.5...v1.2.0) (2026-06-21)
+
+
+### Features
+
+* add nightly Lighthouse audit workflow ([#12](https://github.com/Sterphius/ai-for-developers-project-387/issues/12)) ([f7d1d01](https://github.com/Sterphius/ai-for-developers-project-387/commit/f7d1d01d743eb6d06e2d99699475c47a7a309b07))
+
 ## [1.1.5](https://github.com/Sterphius/ai-for-developers-project-387/compare/v1.1.4...v1.1.5) (2026-06-21)
 
 
