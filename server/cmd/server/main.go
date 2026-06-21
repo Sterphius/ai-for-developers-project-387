@@ -28,7 +28,7 @@ func main() {
 
 	st := store.New(model.Owner{
 		ID:    "owner",
-		Name:  "Agent Smith",
+		Name:  "Thomas A. Anderson",
 		Email: "owner@example.com",
 	})
 	seed(st)
