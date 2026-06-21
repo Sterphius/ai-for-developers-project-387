@@ -70,14 +70,20 @@ export function usePublicEventType(id: string) {
   });
 }
 
-export function useSlots(id: string) {
+export function useSlots(id: string, durationMinutes?: number) {
   return useQuery({
-    queryKey: queryKeys.slots(id),
+    queryKey: [...queryKeys.slots(id), { durationMinutes }],
     enabled: Boolean(id),
     queryFn: async (): Promise<Slot[]> => {
+      const params: { path: { id: string }; query?: { durationMinutes?: number } } = {
+        path: { id },
+      };
+      if (durationMinutes !== undefined) {
+        params.query = { durationMinutes };
+      }
       const { data, error, response } = await api.GET(
         "/api/event-types/{id}/slots",
-        { params: { path: { id } } },
+        { params },
       );
       if (error) throw new ApiClientError(response.status, error);
       return data ?? [];

@@ -3,6 +3,7 @@ package httpapi
 import (
 	"errors"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
@@ -48,7 +49,18 @@ func (s *Server) getSlots(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	out, err := s.store.Slots(r.PathValue("id"), from, to)
+	var durationMinutes *int32
+	if dm := r.URL.Query().Get("durationMinutes"); dm != "" {
+		val, err := strconv.Atoi(dm)
+		if err != nil || val < 1 {
+			writeError(w, http.StatusBadRequest, model.ErrInvalidSlot, "невалидный durationMinutes (ожидается целое ≥ 1)")
+			return
+		}
+		v := int32(val)
+		durationMinutes = &v
+	}
+
+	out, err := s.store.Slots(r.PathValue("id"), from, to, durationMinutes)
 	if errors.Is(err, store.ErrEventTypeNotFound) {
 		writeError(w, http.StatusNotFound, model.ErrEventTypeNotFound, "тип события не найден")
 		return
@@ -84,6 +96,10 @@ func (s *Server) createBooking(w http.ResponseWriter, r *http.Request) {
 	}
 	if in.Start.IsZero() {
 		writeError(w, http.StatusBadRequest, model.ErrInvalidSlot, "не указано время start")
+		return
+	}
+	if in.DurationMinutes != nil && *in.DurationMinutes < 1 {
+		writeError(w, http.StatusBadRequest, model.ErrInvalidSlot, "длительность должна быть ≥ 1")
 		return
 	}
 

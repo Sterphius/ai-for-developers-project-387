@@ -65,10 +65,11 @@ type Booking struct {
 
 // BookingCreate is the booking request body. End is computed by the server.
 type BookingCreate struct {
-	EventTypeID string    `json:"eventTypeId"`
-	Start       time.Time `json:"start"`
-	GuestName   string    `json:"guestName"`
-	GuestEmail  string    `json:"guestEmail"`
+	EventTypeID     string    `json:"eventTypeId"`
+	Start           time.Time `json:"start"`
+	GuestName       string    `json:"guestName"`
+	GuestEmail      string    `json:"guestEmail"`
+	DurationMinutes *int32    `json:"durationMinutes,omitempty"`
 }
 
 // Owner is the single, pre-seeded calendar owner profile.

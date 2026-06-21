@@ -47,13 +47,39 @@ export function BookingPage() {
   const { toast } = useToast();
 
   const eventTypeQuery = usePublicEventType(eventTypeId);
-  const slotsQuery = useSlots(eventTypeId);
+
+  const [customDurationMinutes, setCustomDurationMinutes] = useState<
+    number | undefined
+  >(undefined);
+  const [durationInput, setDurationInput] = useState("");
+
+  const eventType = eventTypeQuery.data;
+
+  // Устанавливаем длительность по умолчанию из типа события.
+  useEffect(() => {
+    if (eventType) {
+      setCustomDurationMinutes(eventType.durationMinutes);
+      setDurationInput(String(eventType.durationMinutes));
+    }
+  }, [eventType]);
+
+  const slotsQuery = useSlots(eventTypeId, customDurationMinutes);
   const createBooking = useCreateBooking();
 
   const [selectedSlot, setSelectedSlot] = useState<Slot | null>(null);
   const [guestName, setGuestName] = useState("");
   const [guestEmail, setGuestEmail] = useState("");
   const [formError, setFormError] = useState<string | null>(null);
+
+  function commitDuration() {
+    const val = parseInt(durationInput, 10);
+    if (Number.isInteger(val) && val >= 1) {
+      setCustomDurationMinutes(val);
+    } else if (eventType) {
+      setDurationInput(String(eventType.durationMinutes));
+      setCustomDurationMinutes(eventType.durationMinutes);
+    }
+  }
 
   // Тип события не найден → возвращаем на список.
   useEffect(() => {
@@ -105,6 +131,7 @@ export function BookingPage() {
         start: selectedSlot.start,
         guestName: guestName.trim(),
         guestEmail: guestEmail.trim(),
+        durationMinutes: customDurationMinutes,
       });
       navigate(`/book/${encodeURIComponent(eventTypeId)}/success`, {
         state: { booking, eventType: eventTypeQuery.data },
@@ -132,8 +159,6 @@ export function BookingPage() {
       setFormError(getErrorMessage(err));
     }
   }
-
-  const eventType = eventTypeQuery.data;
 
   return (
     <div className="mx-auto max-w-3xl">
@@ -164,6 +189,52 @@ export function BookingPage() {
             <p className="text-xs text-muted-foreground">
               Время указано в вашей зоне: {localTimeZone}
             </p>
+          </CardContent>
+        </Card>
+      )}
+
+      {eventType && (
+        <Card className="mb-4">
+          <CardContent className="pt-4">
+            <div className="flex items-center gap-3">
+              <div className="flex-1">
+                <Label htmlFor="duration">Длительность (минут)</Label>
+                <div className="mt-1 flex items-center gap-2">
+                  <Input
+                    id="duration"
+                    type="number"
+                    min={1}
+                    value={durationInput}
+                    onChange={(e) => setDurationInput(e.target.value)}
+                    onBlur={commitDuration}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") commitDuration();
+                    }}
+                    className="w-24"
+                  />
+                  {customDurationMinutes !== undefined && (
+                    <span className="text-sm text-muted-foreground">
+                      {formatDuration(customDurationMinutes)}
+                    </span>
+                  )}
+                </div>
+              </div>
+              {customDurationMinutes !==
+                eventType?.durationMinutes && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    if (eventType) {
+                      setDurationInput(String(eventType.durationMinutes));
+                      setCustomDurationMinutes(eventType.durationMinutes);
+                    }
+                  }}
+                >
+                  Сбросить
+                </Button>
+              )}
+            </div>
           </CardContent>
         </Card>
       )}

@@ -131,7 +131,8 @@ export interface paths {
          *     - Окно 14 дней: start должен попадать в [now, now+14d] → иначе 400 (INVALID_SLOT).
          *     - Сетка: start должен быть выровнен по durationMinutes от начала окна → иначе 400.
          *     - Тип события должен существовать → иначе 404 (EVENT_TYPE_NOT_FOUND).
-         *     - `end` вычисляется сервером из durationMinutes выбранного типа.
+         *     - `end` вычисляется сервером из durationMinutes выбранного типа (или из переданного
+         *     `durationMinutes` в теле запроса).
          */
         post: operations["Public_createBooking"];
         delete?: never;
@@ -192,6 +193,8 @@ export interface paths {
          *     - Сетка: слоты выровнены по durationMinutes от начала окна.
          *     - Занятые слоты возвращаются с `available: false`.
          *     - Если переданы `from`/`to`, они обрезаются по 14-дневному окну.
+         *     - Если передан `durationMinutes`, сетка строится с указанным шагом;
+         *     иначе используется шаг из типа события.
          */
         get: operations["Public_getSlots"];
         put?: never;
@@ -238,7 +241,8 @@ export interface components {
         /**
          * @description Тело запроса на создание бронирования.
          *
-         *     Поле `end` не передаётся — оно вычисляется сервером из durationMinutes выбранного типа.
+         *     Поле `end` не передаётся — оно вычисляется сервером из durationMinutes выбранного типа
+         *     (или из переданного `durationMinutes`).
          */
         BookingCreate: {
             /** @description Идентификатор типа события. */
@@ -255,6 +259,11 @@ export interface components {
              * @description Email гостя.
              */
             guestEmail: string;
+            /**
+             * Format: int32
+             * @description Длительность встречи в минутах. Если не указана, используется длительность типа события.
+             */
+            durationMinutes?: number;
         };
         /** @description Единый формат ошибок. */
         Error: {
@@ -346,7 +355,7 @@ export interface components {
             start: string;
             /**
              * Format: date-time
-             * @description Конец слота (UTC). Равен start + durationMinutes.
+             * @description Конец слота (UTC). Равен start + шаг сетки.
              */
             end: string;
             /** @description Доступен ли слот для бронирования. */
@@ -696,6 +705,8 @@ export interface operations {
                 from?: string;
                 /** @description Конец запрашиваемого диапазона (UTC). Опционально. */
                 to?: string;
+                /** @description Шаг сетки в минутах. Если не указан, используется durationMinutes типа события. */
+                durationMinutes?: number;
             };
             header?: never;
             path: {

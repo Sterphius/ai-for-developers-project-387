@@ -138,15 +138,20 @@ func (s *Store) DeleteEventType(id string) error {
 // ---------------------------------------------------------------------------
 
 // Slots returns the 14-day availability grid for an event type. Optional
-// from/to clamp the visible range within the window.
-func (s *Store) Slots(eventTypeID string, from, to *time.Time) ([]model.Slot, error) {
+// from/to clamp the visible range within the window. If customDurationMinutes
+// is non-nil and >= 1, it overrides the event type's duration as the step.
+func (s *Store) Slots(eventTypeID string, from, to *time.Time, customDurationMinutes *int32) ([]model.Slot, error) {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
 	et, ok := s.eventTypes[eventTypeID]
 	if !ok {
 		return nil, ErrEventTypeNotFound
 	}
-	return slots.Generate(et, s.bookingsSlice(), s.now().UTC(), from, to), nil
+	step := time.Duration(et.DurationMinutes) * time.Minute
+	if customDurationMinutes != nil && *customDurationMinutes >= 1 {
+		step = time.Duration(*customDurationMinutes) * time.Minute
+	}
+	return slots.Generate(step, s.bookingsSlice(), s.now().UTC(), from, to), nil
 }
 
 // ---------------------------------------------------------------------------
@@ -181,6 +186,9 @@ func (s *Store) CreateBooking(in model.BookingCreate) (model.Booking, error) {
 	now := s.now().UTC()
 	start := in.Start.UTC()
 	step := time.Duration(et.DurationMinutes) * time.Minute
+	if in.DurationMinutes != nil && *in.DurationMinutes >= 1 {
+		step = time.Duration(*in.DurationMinutes) * time.Minute
+	}
 
 	if !slots.InWindow(start, now, step) {
 		return model.Booking{}, ErrOutOfWindow
