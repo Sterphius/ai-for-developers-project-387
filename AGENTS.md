@@ -40,3 +40,13 @@ Dev data flow: run `mock` and `dev` together. `VITE_API_BASE_URL` (`.env.develop
 ## CI
 
 `.github/workflows/hexlet-check.yml` is auto-generated and marked DO NOT EDIT (Hexlet project check). It does not run project lint/tests — verify locally.
+
+## Deployment (Railway)
+
+Railway project `calendar-booking` (id `87c1032f...`) deploys the Go server on every push to `main`.
+
+- Repo connected as source (`Sterphius/ai-for-developers-project-387`), root directory `server/`
+- Build: `go build -o server ./cmd/server` (via `server/railway.toml`)
+- Deployed to `https://calendar-booking-production-ccc7.up.railway.app`
+- Railway GitHub App triggers auto-deploy on push to `main`
+- The frontend is currently **not** deployed on Railway (only the backend API)
