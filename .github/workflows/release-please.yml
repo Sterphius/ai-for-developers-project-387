@@ -16,5 +16,5 @@ jobs:
           GH_TOKEN: ${{ secrets.RELEASE_PLEASE_PAT }}
         run: |
           echo '${{ steps.release.outputs.prs }}' | jq -r '.[].number // empty' | while read -r PR; do
-            gh pr merge --auto --squash "$PR"
+            gh pr merge --auto --squash "$PR" --repo "${{ github.repository }}"
           done
