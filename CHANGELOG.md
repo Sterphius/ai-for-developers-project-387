@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/Sterphius/ai-for-developers-project-387/compare/v1.1.0...v1.1.1) (2026-06-21)
+
+
+### Bug Fixes
+
+* pass --repo to gh in auto-merge step ([f649834](https://github.com/Sterphius/ai-for-developers-project-387/commit/f649834eb38bb26d55fdecdbc2c7fcccd3fb2f58))
+
 ## [1.1.0](https://github.com/Sterphius/ai-for-developers-project-387/compare/v1.0.0...v1.1.0) (2026-06-21)
 
 
