@@ -2,7 +2,7 @@ node_modules/
 test-results/
 web/test-results/
 .DS_Store
-api
+/api
 /cmd/
 /internal/
 /migrations/
