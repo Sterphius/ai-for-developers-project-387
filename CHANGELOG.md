@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/Sterphius/ai-for-developers-project-387/compare/v1.0.0...v1.1.0) (2026-06-21)
+
+
+### Features
+
+* custom duration for booking meetings ([da74989](https://github.com/Sterphius/ai-for-developers-project-387/commit/da749891368df0c4cbdced30dc909c554e0e072c))
+
 ## 1.0.0 (2026-06-21)
 
 
