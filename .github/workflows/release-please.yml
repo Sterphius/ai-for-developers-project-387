@@ -7,6 +7,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: googleapis/release-please-action@v4
+        id: release
         with:
           token: ${{ secrets.RELEASE_PLEASE_PAT }}
           release-type: simple
+      - name: Enable auto-merge on release PR
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_PLEASE_PAT }}
+        run: |
+          echo '${{ steps.release.outputs.prs }}' | jq -r '.[].number // empty' | while read -r PR; do
+            gh pr merge --auto --squash "$PR"
+          done
