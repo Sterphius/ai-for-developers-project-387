@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.5](https://github.com/Sterphius/ai-for-developers-project-387/compare/v1.1.4...v1.1.5) (2026-06-21)
+
+
+### Bug Fixes
+
+* deploy frontend + backend together via root Dockerfile ([c8fa97b](https://github.com/Sterphius/ai-for-developers-project-387/commit/c8fa97b809c7b9fc018b3c82f4a127f7ee52b5eb))
+
 ## [1.1.4](https://github.com/Sterphius/ai-for-developers-project-387/compare/v1.1.3...v1.1.4) (2026-06-21)
 
 
