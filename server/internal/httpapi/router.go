@@ -37,9 +37,6 @@ func (s *Server) Handler(corsOrigin string) http.Handler {
 
 	root := http.NewServeMux()
 	root.Handle("/api/", recoverPanic(logRequests(cors(corsOrigin, mux))))
-	root.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		w.Write([]byte(`{"status":"ok","api":"https://calendar-booking-production-ccc7.up.railway.app/api"}`))
-	})
+	root.Handle("/", staticHandler())
 	return root
 }
