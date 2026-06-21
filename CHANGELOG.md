@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.3](https://github.com/Sterphius/ai-for-developers-project-387/compare/v1.1.2...v1.1.3) (2026-06-21)
+
+
+### Bug Fixes
+
+* railway.toml start command to match railpack output ([04221b7](https://github.com/Sterphius/ai-for-developers-project-387/commit/04221b753444f9ea7dd20d3607fa4dbe33569a99))
+
 ## [1.1.2](https://github.com/Sterphius/ai-for-developers-project-387/compare/v1.1.1...v1.1.2) (2026-06-21)
 
 
