@@ -23,7 +23,7 @@ test.describe("Гость — произвольная длительность"
 
     const input = page.locator("#duration");
     await expect(input).toBeVisible();
-    await expect(input).toHaveValue(30); // intro-call has 30 min duration
+    await expect(input).toHaveValue("30"); // intro-call has 30 min duration
   });
 
   // Сценарий B: изменение длительности перезапрашивает слоты
@@ -116,7 +116,7 @@ test.describe("Гость — произвольная длительность"
     // Проверяем успех
     await expect(page).toHaveURL(/\/book\/.+\/success$/, { timeout: 15000 });
     await expect(page.getByText("Встреча забронирована")).toBeVisible();
-    await expect(page.getByText("45 минут")).toBeVisible();
+    await expect(page.getByText("45 мин")).toBeVisible();
     await expect(page.getByText("Custom Duration Guest")).toBeVisible();
     await expect(page.getByText("custom-dur@test.com")).toBeVisible();
 
@@ -141,6 +141,6 @@ test.describe("Гость — произвольная длительность"
     await page.waitForTimeout(300);
 
     // Значение вернулось к 30
-    await expect(input).toHaveValue(30);
+    await expect(input).toHaveValue("30");
   });
 });
