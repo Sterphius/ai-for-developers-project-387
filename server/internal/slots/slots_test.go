@@ -18,9 +18,9 @@ func mustTime(t *testing.T, s string) time.Time {
 
 func TestGenerate_StepAndWindowBounds(t *testing.T) {
 	now := mustTime(t, "2026-01-01T00:00:00Z")
-	et := model.EventType{ID: "x", DurationMinutes: 30}
+	step := 30 * time.Minute
 
-	got := Generate(et, nil, now, nil, nil)
+	got := Generate(step, nil, now, nil, nil)
 
 	// 14 days, 30-min slots => 14*24*2 = 672 slots, all available.
 	if len(got) != 672 {
@@ -42,13 +42,13 @@ func TestGenerate_StepAndWindowBounds(t *testing.T) {
 
 func TestGenerate_MarksOccupied(t *testing.T) {
 	now := mustTime(t, "2026-01-01T00:00:00Z")
-	et := model.EventType{ID: "x", DurationMinutes: 60}
+	step := 60 * time.Minute
 	bookings := []model.Booking{{
 		Start: mustTime(t, "2026-01-01T02:00:00Z"),
 		End:   mustTime(t, "2026-01-01T03:00:00Z"),
 	}}
 
-	got := Generate(et, bookings, now, nil, nil)
+	got := Generate(step, bookings, now, nil, nil)
 
 	var occupied []time.Time
 	for _, s := range got {

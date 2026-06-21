@@ -59,11 +59,10 @@ func Overlaps(aStart, aEnd, bStart, bEnd time.Time) bool {
 	return aStart.Before(bEnd) && bStart.Before(aEnd)
 }
 
-// Generate builds the slot grid for an event type within [now, now+14d].
-// Each slot is step=durationMinutes long; occupied slots are returned with
-// Available=false. Optional from/to clamp the visible range to the window.
-func Generate(et model.EventType, bookings []model.Booking, now time.Time, from, to *time.Time) []model.Slot {
-	step := time.Duration(et.DurationMinutes) * time.Minute
+// Generate builds the slot grid with the given step within [now, now+14d].
+// Each slot is step long; occupied slots are returned with Available=false.
+// Optional from/to clamp the visible range to the window.
+func Generate(step time.Duration, bookings []model.Booking, now time.Time, from, to *time.Time) []model.Slot {
 	if step <= 0 {
 		return nil
 	}

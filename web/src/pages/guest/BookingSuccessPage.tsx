@@ -59,11 +59,15 @@ export function BookingSuccessPage() {
             {formatDateTime(booking.start)} (
             {formatTimeRange(booking.start, booking.end)})
           </Row>
-          {eventType && (
-            <Row icon={<Clock className="h-4 w-4" />} label="Длительность">
-              {formatDuration(eventType.durationMinutes)}
-            </Row>
-          )}
+          <Row icon={<Clock className="h-4 w-4" />} label="Длительность">
+            {formatDuration(
+              Math.round(
+                (new Date(booking.end).getTime() -
+                  new Date(booking.start).getTime()) /
+                  60000,
+              ),
+            )}
+          </Row>
           <Row icon={<User className="h-4 w-4" />} label="Гость">
             {booking.guestName}
           </Row>

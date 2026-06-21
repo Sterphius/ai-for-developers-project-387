@@ -15,7 +15,7 @@ type storeAPI interface {
 	UpdateEventType(id string, in model.EventTypeUpdate) (model.EventType, error)
 	DeleteEventType(id string) error
 
-	Slots(eventTypeID string, from, to *time.Time) ([]model.Slot, error)
+	Slots(eventTypeID string, from, to *time.Time, customDurationMinutes *int32) ([]model.Slot, error)
 
 	ListBookings() []model.Booking
 	CreateBooking(in model.BookingCreate) (model.Booking, error)

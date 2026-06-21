@@ -67,8 +67,15 @@ export async function createBooking(
   start: string,
   guestName: string,
   guestEmail: string,
+  durationMinutes?: number,
 ): Promise<{ id: string }> {
-  return apiPost("/bookings", { eventTypeId, start, guestName, guestEmail });
+  return apiPost("/bookings", {
+    eventTypeId,
+    start,
+    guestName,
+    guestEmail,
+    ...(durationMinutes !== undefined && { durationMinutes }),
+  });
 }
 
 export async function deleteEventType(id: string): Promise<void> {

@@ -9,6 +9,8 @@ info:
 
     Ключевые решения:
     - Грануляция слотов: сетка по длительности выбранного типа события (шаг = durationMinutes).
+    Гость может переопределить шаг, передав `durationMinutes` в запрос слотов и при создании
+    бронирования.
     - Доступность: 24/7, окно 14 дней от текущей даты, без рабочих часов.
     - Данные гостя при брони: имя + email.
     - Авторизация отсутствует. Эндпоинты владельца открыты, профиль владельца — единственный,
@@ -219,7 +221,8 @@ paths:
         - Окно 14 дней: start должен попадать в [now, now+14d] → иначе 400 (INVALID_SLOT).
         - Сетка: start должен быть выровнен по durationMinutes от начала окна → иначе 400.
         - Тип события должен существовать → иначе 404 (EVENT_TYPE_NOT_FOUND).
-        - `end` вычисляется сервером из durationMinutes выбранного типа.
+        - `end` вычисляется сервером из durationMinutes выбранного типа (или из переданного
+        `durationMinutes` в теле запроса).
       parameters: []
       responses:
         '201':
@@ -308,6 +311,8 @@ paths:
         - Сетка: слоты выровнены по durationMinutes от начала окна.
         - Занятые слоты возвращаются с `available: false`.
         - Если переданы `from`/`to`, они обрезаются по 14-дневному окну.
+        - Если передан `durationMinutes`, сетка строится с указанным шагом;
+        иначе используется шаг из типа события.
       parameters:
         - name: id
           in: path
@@ -330,6 +335,15 @@ paths:
           schema:
             type: string
             format: date-time
+          explode: false
+        - name: durationMinutes
+          in: query
+          required: false
+          description: Шаг сетки в минутах. Если не указан, используется durationMinutes типа события.
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
           explode: false
       responses:
         '200':
@@ -415,10 +429,16 @@ components:
           type: string
           format: email
           description: Email гостя.
+        durationMinutes:
+          type: integer
+          format: int32
+          minimum: 1
+          description: Длительность встречи в минутах. Если не указана, используется длительность типа события.
       description: |-
         Тело запроса на создание бронирования.
 
-        Поле `end` не передаётся — оно вычисляется сервером из durationMinutes выбранного типа.
+        Поле `end` не передаётся — оно вычисляется сервером из durationMinutes выбранного типа
+        (или из переданного `durationMinutes`).
     Error:
       type: object
       required:
@@ -543,7 +563,7 @@ components:
         end:
           type: string
           format: date-time
-          description: Конец слота (UTC). Равен start + durationMinutes.
+          description: Конец слота (UTC). Равен start + шаг сетки.
         available:
           type: boolean
           description: Доступен ли слот для бронирования.
