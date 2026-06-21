@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.4](https://github.com/Sterphius/ai-for-developers-project-387/compare/v1.1.3...v1.1.4) (2026-06-21)
+
+
+### Bug Fixes
+
+* make server API-only, remove embedded frontend ([e94a387](https://github.com/Sterphius/ai-for-developers-project-387/commit/e94a3873603162de9ac48602afcb7f3f52b10f8b))
+
 ## [1.1.3](https://github.com/Sterphius/ai-for-developers-project-387/compare/v1.1.2...v1.1.3) (2026-06-21)
 
 
