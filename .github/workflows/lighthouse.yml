@@ -1,0 +1,35 @@
+name: Lighthouse Check
+
+on:
+  schedule:
+    - cron: '0 18 * * *'
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Lighthouse
+        run: npm install -g lighthouse
+
+      - name: Run Lighthouse audit
+        run: |
+          mkdir -p lighthouse-report
+          lighthouse \
+            https://calendar-booking-production-ccc7.up.railway.app \
+            --chrome-flags="--headless --no-sandbox --disable-gpu" \
+            --output=html \
+            --output=json \
+            --output-path=./lighthouse-report/report
+
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report
+          path: ./lighthouse-report/
